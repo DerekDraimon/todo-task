@@ -1,0 +1,60 @@
+@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root.theme-todo {
+  --bg: #f9fafb;
+  --surface: #ffffff;
+  --text: #1f2937;
+  --text-secondary: #6b7280;
+  --border: #e5e7eb;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --accent: #6366f1;
+}
+
+.dark.theme-todo {
+  --bg: #111827;
+  --surface: #1f2937;
+  --text: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --border: #374151;
+  --primary: #60a5fa;
+  --primary-hover: #93c5fd;
+  --accent: #818cf8;
+}
+
+.btn {
+  background-color: var(--primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+  background-color: var(--primary-hover);
+}
+
+@layer components {
+  .card {
+    @apply 
+    bg-[var(--surface)] 
+    text-[var(--text)] 
+    p-4 
+    border 
+    border-[var(--border)] 
+    rounded-lg shadow;
+  }
+}
+
+.input {
+  background-color: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  width: 100%;
+}
