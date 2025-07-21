@@ -16,8 +16,8 @@ export const updateTask = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const updated = await TaskModel.findByIdAndUpdate(id, req.body, {
-      new: true,      // Devuelve la tarea actualizada
-      runValidators: true // Aplica validaciones del schema
+      new: true,      
+      runValidators: true 
     });
 
     if (!updated) {

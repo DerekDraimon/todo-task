@@ -3,7 +3,7 @@ import type { Task } from "../../domain/entities/Task";
 import type { NewTask } from "../../domain/entities/NewTask";
 
 export class TaskService implements ITaskRepository {
-  private readonly baseUrl = "http://localhost:3000/api/tasks"; // Ajustable al backend real
+  private readonly baseUrl = "http://localhost:3000/api/tasks";
 
   async getAll(filter?: TaskFilter): Promise<Task[]> {
     const params = new URLSearchParams();

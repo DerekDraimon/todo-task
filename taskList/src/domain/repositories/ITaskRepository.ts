@@ -16,5 +16,5 @@ export interface ITaskRepository {
   create(task: NewTask): Promise<Task>;
   update(id: string, task: Partial<NewTask>): Promise<Task>;
   markAsCompleted(id: string): Promise<Task>;
-  delete(id: string): Promise<void>; // lógica soft delete
+  delete(id: string): Promise<void>;
 }
