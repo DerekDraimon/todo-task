@@ -16,6 +16,8 @@ interface TaskFormProps {
 
 export const TaskForm = ({ title, onSubmit, initialData }: TaskFormProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showErrors, setShowErrors] = useState(false);
+
 
   const [formData, setFormData] = useState<{
     id?: string;
@@ -60,6 +62,18 @@ export const TaskForm = ({ title, onSubmit, initialData }: TaskFormProps) => {
   };
 
   const handleSubmit = async () => {
+
+    if (
+      formData.title.trim() === "" ||
+      formData.description.trim() === "" ||
+      formData.dueDate === "" ||
+      formData.priority === "" ||
+      formData.category === ""
+    ) {
+      setShowErrors(true);
+      return;
+    }
+
     const taskToSend = {
       ...formData,
       dueDate: new Date(formData.dueDate),
@@ -72,9 +86,10 @@ export const TaskForm = ({ title, onSubmit, initialData }: TaskFormProps) => {
     resetForm();
   };
 
+
   const resetForm = () => {
     setIsOpen(false);
-
+    setShowErrors(false);
     setFormData({
       id: "",
       title: "",
@@ -95,16 +110,61 @@ export const TaskForm = ({ title, onSubmit, initialData }: TaskFormProps) => {
 
       <FormModal
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+        onClose={() => resetForm()}
         onSubmit={handleSubmit}
         title={title}
       >
-        <TextInput label="Título" name="title" value={formData.title} onChange={handleChange} />
-        <TextArea label="Descripción" name="description" value={formData.description} onChange={handleChange} />
-        <DateInput label="Fecha límite" name="dueDate" value={formData.dueDate} onChange={handleChange} />
-        <SelectList label="Prioridad" name="priority" value={formData.priority} options={Object.values(Priority)} onChange={handleChange} />
-        <SelectList label="Categoría" name="category" value={formData.category} options={Object.values(Category)} onChange={handleChange} />
-        <SelectList label="Estado" name="status" value={formData.status} options={Object.values(Status)} onChange={handleChange} />
+        <TextInput
+          label="Título"
+          name="title"
+          value={formData.title}
+          required
+          error={formData.title.trim() === "" && showErrors}
+          onChange={handleChange}
+        />
+        <TextArea
+          label="Descripción"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          required
+          error={formData.description.trim() === "" && showErrors}
+        />
+        <DateInput
+          label="Fecha límite"
+          name="dueDate"
+          value={formData.dueDate}
+          onChange={handleChange}
+          required
+          error={formData.description.trim() === "" && showErrors}
+        />
+
+        <SelectList
+          label="Prioridad"
+          name="priority"
+          value={formData.priority}
+          options={Object.values(Priority)}
+          onChange={handleChange}
+          required
+          error={formData.description.trim() === "" && showErrors}
+        />
+        <SelectList label="Categoría"
+          name="category"
+          value={formData.category}
+          options={Object.values(Category)}
+          onChange={handleChange}
+          required
+          error={formData.description.trim() === "" && showErrors}
+        />
+        <SelectList
+          label="Estado"
+          name="status"
+          value={formData.status}
+          options={Object.values(Status)}
+          onChange={handleChange}
+          required
+          error={formData.description.trim() === "" && showErrors}
+        />
       </FormModal>
     </>
   );

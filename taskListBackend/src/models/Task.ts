@@ -7,7 +7,7 @@ export interface ITask {
   priority: "Alta" | "Media" | "Baja";
   category: "Trabajo" | "Personal" | "Estudio";
   status: "Pendiente" | "Completada";
-  isActive: boolean; // para soft delete
+  isActive: boolean;
 }
 
 const TaskSchema = new Schema<ITask>(

@@ -32,3 +32,18 @@
   background-position: right 0.5rem center;
   background-size: 1rem;
 }
+
+.required {
+  color: var(--color-danger);
+  margin-left: 4px;
+}
+
+.error {
+  border: 1px solid var(--color-danger);
+}
+
+.errorMessage {
+  color: var(--color-danger-text);
+  font-size: var(--font-size-xs);
+  margin-top: 4px;
+}

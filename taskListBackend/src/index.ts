@@ -19,9 +19,9 @@ connectDB();
 
 // Rutas (se conectarán después)
 app.get("/", (req, res) => {
-  res.send("API Todo funcionando 🎯");
+  res.send("API Todo funcionando");
 });
 
 app.listen(port, () => {
-  console.log(`🚀 Servidor escuchando en http://localhost:${port}`);
+  console.log(`Servidor escuchando en http://localhost:${port}`);
 });
