@@ -1,7 +1,7 @@
 import { Priority, Category, Status } from "../entities/TaskEnums";
 
 export interface Task {
-  id: string; 
+  id?: string; 
   title: string;
   description: string;
   dueDate: Date;

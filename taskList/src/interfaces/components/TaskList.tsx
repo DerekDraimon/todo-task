@@ -9,7 +9,7 @@ interface TaskListProp {
 
 export const TaskList: React.FC<TaskListProp> = ({ tasks }) => {
 
-  const { deleteTask, completeTask } = useContext(TaskContext);
+  const { deleteTask, completeTask, updateTask } = useContext(TaskContext);
 
   return (
     <div>
@@ -19,6 +19,7 @@ export const TaskList: React.FC<TaskListProp> = ({ tasks }) => {
           task={task}
           handleComplete={completeTask}
           handleDelete={deleteTask}
+          handleUpdate={updateTask}
         />
       ))}
     </div>

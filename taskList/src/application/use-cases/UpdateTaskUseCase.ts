@@ -1,6 +1,5 @@
 import type { ITaskRepository } from "../../domain/repositories/ITaskRepository";
 import type { Task } from "../../domain/entities/Task";
-import type { NewTask } from "../../domain/entities/NewTask";
 
 export class UpdateTaskUseCase {
   private readonly repository: ITaskRepository;
@@ -9,7 +8,7 @@ export class UpdateTaskUseCase {
     this.repository = repository;
   }
 
-  async execute(id: string, updatedFields: Partial<NewTask>): Promise<Task> {
-    return await this.repository.update(id, updatedFields);
+  async execute(updatedFields: Task): Promise<Task> {
+    return await this.repository.update(updatedFields);
   }
 }

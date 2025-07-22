@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import styles from "./TaskHeaderLayout.module.css";
 
 import { TextInput } from "../ImputText/ImputText";
 import { SelectList } from "../SelectList/SelectList";
-import { TaskCreator } from "../../interfaces/components/TaskCreator";
+import { TaskContext } from "../../infrastructure/context/TaskContext";
+import { Category, Priority, SortByDueDate, Status } from "../../domain/entities/TaskEnums";
+import { TaskForm } from "../../interfaces/components/TaskForm";
 
 interface TaskHeaderLayoutProps {
   title: string;
@@ -12,16 +14,19 @@ interface TaskHeaderLayoutProps {
 export const TaskHeaderLayout: React.FC<TaskHeaderLayoutProps> = ({
   title
 }) => {
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
-  const [priority, setPriority] = useState("");
-  const [category, setCategory] = useState("");
+  const { search, setSearch, status, setStatus, priority, setPriority, category, setCategory, sortByDueDate, setSortByDueDate, createTask } = useContext(TaskContext);
 
   return (
     <div className={styles.headerContainer}>
       <div className={styles.headerTop}>
         <h1 className={styles.title}>{title}</h1>
-        <TaskCreator />
+        <div>
+          {/* <ThemeToggle /> */}
+          <TaskForm
+            title="Crear nueva tarea"
+            onSubmit={createTask}
+          />
+        </div>
       </div>
       <div className={styles.filters}>
         <TextInput
@@ -30,28 +35,40 @@ export const TaskHeaderLayout: React.FC<TaskHeaderLayoutProps> = ({
           onChange={(e) => setSearch(e.target.value)}
           label="Buscar"
         />
+
         <SelectList
           name="status"
-          value={status}
-          options={["", "Pendiente", "Completada"]}
-          onChange={(e) => setStatus(e.target.value)}
           label="Estado"
+          value={status}
+          onChange={(e) => setStatus(e.target.value as Status)}
+          options={Object.values(Status)}
         />
+
         <SelectList
           name="priority"
           value={priority}
-          options={["", "Alta", "Media", "Baja"]}
-          onChange={(e) => setPriority(e.target.value)}
+          options={Object.values(Priority)}
+          onChange={(e) => setPriority(e.target.value as Priority)}
           label="Prioridad"
         />
-        <SelectList
+
+        <SelectList<Category>
+          label="Categoría"
           name="category"
           value={category}
-          options={["", "Estudio", "Trabajo", "Personal"]}
-          onChange={(e) => setCategory(e.target.value)}
-          label="Categoría"
+          options={Object.values(Category)}
+          onChange={(e) => setCategory(e.target.value as Category)}
+        />
+
+        <SelectList
+          name="shortByDueDate"
+          value={sortByDueDate}
+          options={Object.values(SortByDueDate)}
+          onChange={(e) => setSortByDueDate(e.target.value as SortByDueDate)}
+          label="Ordenar por fecha de vencimiento"
         />
       </div>
     </div>
+
   );
 };

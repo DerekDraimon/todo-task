@@ -50,8 +50,8 @@ export const getTasks = async (req: Request, res: Response) => {
 
     const sortOptions: any = {};
 
-    if (sort === "asc") sortOptions.dueDate = 1;
-    if (sort === "desc") sortOptions.dueDate = -1;
+    if (sort === "Más cercana") sortOptions.dueDate = 1;
+    if (sort === "Más lejana") sortOptions.dueDate = -1;
 
     const tasks = await TaskModel.find(filters).sort(sortOptions);
 

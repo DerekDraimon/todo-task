@@ -15,7 +15,7 @@ export const DateInput = ({
   <div className={styles.fieldGroup}>
     <label className={styles.label}>{label}</label>
     <input
-      className={styles.input}
+      className={styles.date}
       type="date"
       name={name}
       value={value}

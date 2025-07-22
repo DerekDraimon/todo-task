@@ -1,5 +1,4 @@
 import type { ITaskRepository } from "../../domain/repositories/ITaskRepository";
-import type { NewTask } from "../../domain/entities/NewTask";
 import { Status } from "../../domain/entities/TaskEnums";
 import type { Task } from "../../domain/entities/Task";
 
@@ -10,8 +9,8 @@ export class CreateTaskUseCase {
     this.repository = repository;
   }
 
-  async execute(newTask: NewTask): Promise<Task> {
-    const taskWithDefaultStatus: NewTask = {
+  async execute(newTask: Task): Promise<Task> {
+    const taskWithDefaultStatus: Task = {
       ...newTask,
       status: newTask.status ?? Status.PENDING
     };

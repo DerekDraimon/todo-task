@@ -20,3 +20,11 @@ export const Status = {
 } as const;
 
 export type Status = typeof Status[keyof typeof Status];
+
+export const SortByDueDate = {
+  CLOSE: "Más cercana",
+  FAR: "Más lejana"
+} as const;
+
+export type SortByDueDate = typeof SortByDueDate[keyof typeof SortByDueDate];
+

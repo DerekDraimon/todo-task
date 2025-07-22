@@ -8,7 +8,6 @@ import {
 
 import { TaskService } from "../../infrastructure/services/TaskService";
 import type { Task } from "../../domain/entities/Task";
-import type { NewTask } from "../../domain/entities/NewTask";
 import type { TaskFilter } from "../../domain/repositories/ITaskRepository";
 
 import { GetTasksUseCase } from "../../application/use-cases/GetTasksUseCase";
@@ -16,25 +15,27 @@ import { CreateTaskUseCase } from "../../application/use-cases/CreateTaskUseCase
 import { UpdateTaskUseCase } from "../../application/use-cases/UpdateTaskUseCase";
 import { DeleteTaskUseCase } from "../../application/use-cases/DeleteTaskUseCase";
 import { MarkTaskAsCompletedUseCase } from "../../application/use-cases/MarkTaskAsCompletedUseCase";
-import { Category, Priority, Status } from "../../domain/entities/TaskEnums";
+import { Category, Priority, SortByDueDate, Status } from "../../domain/entities/TaskEnums";
 
 const repository = new TaskService();
 
 interface ITaskContextType {
     tasks: Task[];
     loadTasks: (filter?: TaskFilter) => Promise<void>;
-    createTask: (task: NewTask) => Promise<void>;
-    updateTask: (id: string, data: Partial<NewTask>) => Promise<void>;
+    createTask: (task: Task) => Promise<void>;
+    updateTask: (data: Task) => Promise<void>;
     deleteTask: (id: string) => Promise<void>;
     completeTask: (id: string) => Promise<void>;
     search: string;
     status: Status;
     priority: Priority;
     category: Category;
+    sortByDueDate: SortByDueDate;
     setSearch: (search: string) => void;
-    setStatus: (status: string) => void;
-    setPriority: (priority: string) => void;
-    setCategory: (category: string) => void;
+    setStatus: (status: Status) => void;
+    setPriority: (priority: Priority) => void;
+    setCategory: (category: Category) => void;
+    setSortByDueDate: (sortByDueDate: SortByDueDate) => void;
 }
 
 export const TaskContext = createContext<ITaskContextType>({
@@ -45,21 +46,24 @@ export const TaskContext = createContext<ITaskContextType>({
     deleteTask: async () => { },
     completeTask: async () => { },
     search: "",
-    status: Status,
-    priority: Priority,
-    category: Category,
+    status: Status.PENDING,
+    priority: "" as Priority,
+    category: "" as Category,
+    sortByDueDate: "" as SortByDueDate,
     setSearch: () => { },
     setStatus: () => { },
     setPriority: () => { },
     setCategory: () => { },
+    setSortByDueDate: () => { },
 });
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [search, setSearch] = useState("");
-    const [status, setStatus] = useState(Status);
-    const [priority, setPriority] = useState(Priority);
-    const [category, setCategory] = useState(Category);
+    const [status, setStatus] = useState<Status>(Status.PENDING);
+    const [priority, setPriority] = useState<Priority>("" as Priority);
+    const [category, setCategory] = useState<Category>("" as Category);
+    const [sortByDueDate, setSortByDueDate] = useState<SortByDueDate>("" as SortByDueDate);
 
     const getTasks = new GetTasksUseCase(repository);
     const create = new CreateTaskUseCase(repository);
@@ -69,40 +73,52 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
 
     const loadTasks = async (filter?: TaskFilter) => {
         const data = await getTasks.execute(filter);
-        setTasks(data);
+        const mappedData = data.map(task => ({
+            ...task,
+            id: (task as any)._id ?? task.id,
+        }));
+        setTasks(mappedData);
     };
 
-    const createTask = async (task: NewTask) => {
+    const createTask = async (task: Task) => {
         await create.execute(task);
-        await loadTasks();
+        await loadTasks(getCurrentFilter());
     };
 
-    const updateTask = async (id: string, data: Partial<NewTask>) => {
-        await update.execute(id, data);
-        await loadTasks();
+    const updateTask = async (data: Task) => {
+        await update.execute(data);
+        await loadTasks(getCurrentFilter());
     };
 
     const deleteTask = async (id: string) => {
         await remove.execute(id);
-        await loadTasks();
+        await loadTasks(getCurrentFilter());
     };
 
     const completeTask = async (id: string) => {
         await complete.execute(id);
-        await loadTasks();
+        await loadTasks(getCurrentFilter());
     };
+
+    const getCurrentFilter = (): TaskFilter => ({
+        searchTerm: search,
+        status,
+        priority,
+        category,
+    });
 
     useEffect(() => {
         loadTasks({
             searchTerm: search,
-            status:  Status,
-            priority: Priority,
-            category: Category
+            status: status,
+            priority: priority,
+            category: category,
+            sortByDueDate: sortByDueDate,
         });
-    }, [search, status, priority, category]);
+    }, [search, status, priority, category, sortByDueDate]);
 
     return (
-        <TaskContext.Provider value={{ tasks, loadTasks, createTask, updateTask, deleteTask, completeTask, search, status, priority, category, setSearch, setStatus, setPriority, setCategory }}>
+        <TaskContext.Provider value={{ tasks, loadTasks, createTask, updateTask, deleteTask, completeTask, search, status, priority, category, sortByDueDate, setSearch, setStatus, setPriority, setCategory, setSortByDueDate }}>
             {children}
         </TaskContext.Provider>
     );

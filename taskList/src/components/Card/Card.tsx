@@ -3,14 +3,16 @@ import styles from "./Card.module.css";
 import { Button } from "../Button/Button";
 import { Status } from "../../domain/entities/TaskEnums";
 import type { Task } from "../../domain/entities/Task";
+import { TaskForm } from "../../interfaces/components/TaskForm";
 
 type Props = {
   task: Task;
   handleComplete: (id: string) => void;
   handleDelete: (id: string) => void;
+  handleUpdate: (data: Task) => Promise<void>;
 };
 
-export const TaskCard: React.FC<Props> = ({ task, handleComplete, handleDelete }) => {
+export const TaskCard: React.FC<Props> = ({ task, handleComplete, handleDelete,  handleUpdate}) => {
   return (
     <div className={styles.card}>
       <div className={styles.topRow}>
@@ -24,12 +26,19 @@ export const TaskCard: React.FC<Props> = ({ task, handleComplete, handleDelete }
           </p>
         </div>
         <div className={styles.actions}>
-          {task.status !== Status.COMPLETED && (
-            <Button variant="primary" onClick={() => handleComplete(task.id)}>
+          {task.status !== Status.COMPLETED && task.id !== undefined &&  (
+            <Button variant="primary" onClick={() => handleComplete(task.id as string)}>
               Completar
             </Button>
           )}
-          <Button variant="secondary" onClick={() => handleDelete(task.id)}>
+
+          <TaskForm
+            title="Editar tarea"
+            onSubmit={handleUpdate}
+            initialData={task}
+          />
+
+          <Button variant="secondary" onClick={() => handleDelete(task.id as string)}>
             Eliminar
           </Button>
         </div>

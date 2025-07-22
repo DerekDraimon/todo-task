@@ -1,30 +1,40 @@
 import React from "react";
 import styles from "./SelectList.module.css";
 
-export const SelectList = ({
+type SelectListProps<T extends string> = {
+  label: string;
+  name: string;
+  value: T;
+  options: T[];
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  placeholder?: string;
+  disabled?: boolean;
+};
+
+export const SelectList = <T extends string>({
   label,
   name,
   value,
   options,
   onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  options: string[];
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-}) => (
+  placeholder = "-- Selecciona --",
+  disabled = false,
+}: SelectListProps<T>) => (
   <div className={styles.fieldGroup}>
-    <label className={styles.label}>{label}</label>
+    <label htmlFor={name} className={styles.label}>
+      {label}
+    </label>
     <select
-      className={styles.select}
+      id={name}
       name={name}
+      className={styles.select}
       value={value}
       onChange={onChange}
+      disabled={disabled}
     >
-      <option value="">-- Selecciona --</option>
+      <option value="">{placeholder}</option>
       {options.map(option => (
-        <option key={option} value={option}>
+        <option value={option}>
           {option}
         </option>
       ))}

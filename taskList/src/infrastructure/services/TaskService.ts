@@ -1,6 +1,5 @@
 import type { ITaskRepository, TaskFilter } from "../../domain/repositories/ITaskRepository";
 import type { Task } from "../../domain/entities/Task";
-import type { NewTask } from "../../domain/entities/NewTask";
 
 export class TaskService implements ITaskRepository {
   private readonly baseUrl = "http://localhost:3000/api/tasks";
@@ -25,7 +24,7 @@ export class TaskService implements ITaskRepository {
     return await response.json();
   }
 
-  async create(task: NewTask): Promise<Task> {
+  async create(task: Task): Promise<Task> {
     const response = await fetch(this.baseUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -35,8 +34,8 @@ export class TaskService implements ITaskRepository {
     return await response.json();
   }
 
-  async update(id: string, task: Partial<NewTask>): Promise<Task> {
-    const response = await fetch(`${this.baseUrl}/${id}`, {
+  async update(task: Task): Promise<Task> {
+    const response = await fetch(`${this.baseUrl}/${task.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(task)

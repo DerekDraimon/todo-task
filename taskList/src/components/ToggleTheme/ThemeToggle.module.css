@@ -1,0 +1,29 @@
+.toggle {
+  width: 50px;
+  height: 26px;
+  border-radius: 999px;
+  background-color: var(--color-border);
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 1px solid var(--color-border);
+}
+
+.slider {
+  width: 22px;
+  height: 22px;
+  background-color: var(--color-surface);
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+}
+
+.toggle.dark {
+  background-color: var(--color-accent);
+}
+
+.toggle.dark .slider {
+  transform: translateX(24px);
+}
